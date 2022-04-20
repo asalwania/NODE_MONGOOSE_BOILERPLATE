@@ -1,3 +1,5 @@
+// db credentials should be from enviroment file
+
 module.exports = {
   HOST: "localhost",
   USER: "root",
