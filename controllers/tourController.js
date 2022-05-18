@@ -18,6 +18,33 @@ exports.createTour = async (req, res) => {
     }
 };
 
+class ApiFeatures {
+    constructor(query, queryStr) {
+        this.query = query;
+        this.queryStr = queryStr;
+    }
+
+    filter() {
+        // BUILD QUERY
+        // 1A) Filtering
+        const queryObj = { ...this.queryStr };
+        const excludedFields = ["page", "sort", "limit", "fields"];
+        excludedFields.forEach((el) => delete queryObj[el]);
+
+        // 1B) Advance filtering
+        // add dollor($) sign in front of gte, gt, lte and lt
+        let queryStr = JSON.stringify(queryObj);
+        queryStr = queryStr.replace(
+            /\b(gte|gt|lte|lt)\b/g,
+            (match) => `$${match}`
+        );
+        queryStr = JSON.parse(queryStr);
+
+        this.query.find(JSON.parse(queryStr));
+        // let query = Tour.find(queryStr);
+    }
+}
+
 exports.getAllTours = async (req, res) => {
     try {
         // BUILD QUERY
@@ -56,6 +83,18 @@ exports.getAllTours = async (req, res) => {
             query = query.select(fields);
         } else {
             query = query.select("-__v");
+        }
+
+        // 4) Pagination
+        const page = req.query.page * 1 || 1;
+        const limit = req.query.limit * 1 || 100;
+        const skip = (page - 1) * limit;
+
+        query = query.skip(skip).limit(limit);
+
+        if (req.query.page) {
+            const numTours = await Tour.countDocuments();
+            if (skip >= numTours) throw new Error(`This page does not exists`);
         }
 
         // EXECUTE A QUERY
@@ -126,4 +165,13 @@ exports.deleteTour = async (req, res) => {
             message: err.message,
         });
     }
+};
+
+// Middlewares
+
+exports.aliasTopTours = async (req, res, next) => {
+    req.query.limit = "5";
+    req.query.sort = "-ratingsAverage,price";
+    req.query.fields = "name,price,ratingAverage,summary,difficulty";
+    next();
 };
