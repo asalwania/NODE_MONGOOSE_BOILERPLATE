@@ -1,24 +1,25 @@
 {
-  "name": "test",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "prod": "SET NODE_ENV=production & nodemon server.js",
-    "dev": "nodemon server.js"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "cors": "^2.8.5",
-    "dotenv": "^16.0.1",
-    "express": "^4.17.3",
-    "mongoose": "^5.13.14",
-    "morgan": "^1.10.0",
-    "mysql2": "^2.3.3",
-    "sequelize": "^6.19.0",
-    "slugify": "^1.6.5",
-    "validator": "^13.7.0"
-  }
+    "name": "test",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "prod": "SET NODE_ENV=production & nodemon server.js",
+        "dev": "nodemon server.js",
+        "debug": "ndb server.js"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "cors": "^2.8.5",
+        "dotenv": "^16.0.1",
+        "express": "^4.17.3",
+        "mongoose": "^5.13.14",
+        "morgan": "^1.10.0",
+        "mysql2": "^2.3.3",
+        "sequelize": "^6.19.0",
+        "slugify": "^1.6.5",
+        "validator": "^13.7.0"
+    }
 }
