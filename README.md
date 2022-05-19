@@ -1,2 +1,6 @@
 # To run server
-  npm run start:dev
+  npm run dev
+# To run production
+  npm run prod
+# To dubug
+  npm run debug
