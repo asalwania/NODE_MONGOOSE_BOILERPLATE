@@ -1,15 +1,18 @@
-exports.getAllUsers = (req, res) => {
-    console.log("from route handler => ", req.body);
+const User = require("../models/userModel");
+const catchAsync = require("../utils/catchAsync");
+
+exports.getAllUsers = catchAsync(async (req, res, next) => {
+    const users = await User.find();
     res.status(200).json({
         status: "sucess",
         results: 1,
-        data: [{ name: "Ajay", age: 30 }],
+        data: users,
     });
-};
+});
 
-exports.getUser = (req, res) => {
+exports.getUser = catchAsync(async (req, res, next) => {
     //
-};
+});
 
 exports.createUser = (req, res) => {
     //
