@@ -11,12 +11,13 @@ const signToken = (id) => {
 };
 
 exports.signup = catchAsync(async (req, res, next) => {
-    const { name, email, password, passwordConfirm } = req.body;
+    const { name, email, password, passwordConfirm, role } = req.body;
     const newUser = await User.create({
         name,
         email,
         password,
         passwordConfirm,
+        role,
     });
 
     const token = signToken(newUser._id);
@@ -53,6 +54,7 @@ exports.login = catchAsync(async (req, res, next) => {
     });
 });
 
+// middleWares
 exports.protect = catchAsync(async (req, res, next) => {
     // 1) Get and check the token
     let token;
@@ -99,3 +101,17 @@ exports.protect = catchAsync(async (req, res, next) => {
     req.user = currentUser;
     next();
 });
+
+exports.restrictTo = (...roles) => {
+    return (req, res, next) => {
+        if (!roles.includes(req.user.role)) {
+            return next(
+                new AppError(
+                    "You do not have permission to perform this action",
+                    403
+                )
+            );
+        }
+        next();
+    };
+};
